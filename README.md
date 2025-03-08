@@ -1,119 +1,109 @@
-Sistema de Gestión de Reservas de Eventos
+# Sistema de Reservas de Eventos
 
-Descripción
+## Descripción
+API REST basada en microservicios para gestionar reservas de eventos, desarrollada como parte del examen final. Implementa una arquitectura limpia con PostgreSQL y Sequelize.
 
-Este proyecto es un sistema basado en microservicios que permite la gestión de eventos y reservas mediante una API REST. Se ha desarrollado utilizando Node.js, Express, y Sequelize para la manipulación de datos en una base de datos PostgreSQL.
+## Tecnologías
+- Node.js / Express
+- PostgreSQL
+- Sequelize ORM
+- Joi (validación)
 
-Características
+## Instalación rápida
 
-Creación, consulta y gestión de eventos.
+```bash
+# Clonar el repositorio
+git clone [https://github.com/nattypacheco17/event-booking-system.git]
 
-Registro y consulta de reservas para eventos.
-
-Arquitectura basada en microservicios siguiendo principios de arquitectura limpia.
-
-Uso de Sequelize ORM para la manipulación de la base de datos.
-
-Tecnologías Utilizadas
-
-Node.js
-
-Express.js
-
-Sequelize
-
-PostgreSQL
-
-Dotenv
-
-Nodemon (para desarrollo)
-
-Instalación
-
-1. Clonar el Repositorio
-
-git clone https://github.com/tu_usuario/tu_repositorio.git
-cd tu_repositorio
-
-2. Instalar Dependencias
-
+# Instalar dependencias
 npm install
 
-3. Configurar la Base de Datos
+# Configurar base de datos
+cp .env.example .env
+# Editar .env con credenciales de la BD
 
-Crear un archivo .env en la raíz del proyecto y configurar las credenciales de la base de datos:
-
-DB_USERNAME=tu_usuario
-DB_PASSWORD=tu_contraseña
-DB_DATABASE=nombre_de_tu_base
-DB_HOST=127.0.0.1
-DB_DIALECT=postgres
-PORT=3000
-
-4. Ejecutar Migraciones
-
+# Crear BD y ejecutar migraciones
+npx sequelize-cli db:create
 npx sequelize-cli db:migrate
 
-5. Iniciar el Servidor
-
+# Iniciar servidor
 npm start
+```
 
-O en modo desarrollo con nodemon:
+## Estructura del proyecto
+```
+/src
+ ├── config/          # Configuración BD
+ ├── models/          # Modelos Sequelize
+ ├── controllers/     # Controladores
+ ├── services/        # Servicios
+ ├── routes/          # Rutas API
+ ├── middlewares/     # Validaciones
+ ├── app.js           # Express
+ └── server.js        # Punto de entrada
+```
 
-npx nodemon index.js
+## Diagrama Entidad-Relación
+- **Evento** (1) --- tiene muchas ---> (n) **Reserva**
 
-El servidor se ejecutará en http://localhost:3000.
+## Endpoints API
 
-Endpoints de la API
+### Eventos
+- `GET /api/eventos` - Listar todos los eventos
+- `GET /api/eventos/:id` - Obtener evento por ID
+- `POST /api/eventos` - Crear evento
 
-Eventos
+### Reservas
+- `GET /api/reservas` - Listar todas las reservas
+- `GET /api/reservas/evento/:eventoId` - Listar reservas por evento
+- `POST /api/reservas` - Crear reserva
 
-GET /events → Obtener todos los eventos
+## Capturas de pantalla
 
-POST /events → Crear un evento
+# Microservicio de eventos (/api/eventos)
+## Crear un evento
+![crear un evento](/images/Crear%20un%20evento.png)
+## Obtener la lista de eventos
+![alt text](/images/Obtener%20la%20lista%20de%20eventos.png)
+## Obtener un evento por ID
+![alt text](/images/Obtener%20un%20evento%20por%20ID.png)
+# Microservicio de reservas (/api/reservas)
+## Crear una reserva asociada a un evento
+![alt text](/images/Crear%20una%20reserva%20asociada%20a%20un%20evento.png)
+## Obtener la lista de reservas
+![alt text](/images/Obtener%20la%20lista%20de%20reservas.png)
+## Obtener las reservas de un evento específico
+![alt text](/images/Obtener%20las%20reservas%20de%20un%20evento%20específico.png)
 
-Reservas
 
-GET /bookings → Obtener todas las reservas
+## Características implementadas
+- ✅ Relación entre dos entidades (Eventos y Reservas)
+- ✅ Validación de datos con Joi
+- ✅ Verificación de capacidad disponible
+- ✅ Arquitectura limpia y modular
+- ✅ Documentación completa
 
-POST /bookings → Crear una reserva
+## Modelo de datos
 
-Ejemplo de petición para crear un evento:
+### Eventos
+```
+id: INTEGER (PK)
+nombre: STRING
+descripcion: STRING
+fecha: DATE
+capacidad: INTEGER
+```
 
-curl -X POST http://localhost:3000/events -H "Content-Type: application/json" -d '{"name": "Concierto Rock", "date": "2024-12-01"}'
+### Reservas
+```
+id: INTEGER (PK)
+email: STRING
+numero_tickets: INTEGER
+eventoId: INTEGER (FK)
+```
 
-Ejemplo de petición para crear una reserva:
+## Autor
+[Nataly Pacheco]
 
-curl -X POST http://localhost:3000/bookings -H "Content-Type: application/json" -d '{"user": "Juan Pérez", "eventId": 1}'
-
-Estructura del Proyecto
-
-project-root/
-│── config/             # Configuración de Sequelize (base de datos)
-│── controllers/        # Lógica de manejo de peticiones HTTP
-│── models/            # Modelos de datos de Sequelize
-│── routes/            # Definición de rutas API REST
-│── services/          # Lógica de negocio
-│── migrations/        # Migraciones de base de datos
-│── seeders/           # Datos de prueba (opcional)
-│── .env               # Variables de entorno (credenciales DB)
-│── index.js           # Punto de entrada principal
-│── README.md          # Documentación del proyecto
-
-Mejoras Futuras
-
-Validaciones de entrada con express-validator.
-
-Autenticación de usuarios con JWT.
-
-Implementación de pruebas unitarias.
-
-Dockerización del servicio.
-
-Autor
-
-Nataly Pacheco - Desarrollo del proyecto para el examen final de Aplicaciones distribuidas.
-
-Licencia
-
-Este proyecto se encuentra bajo la licencia MIT.
+---
+Desarrollado como parte del examen final del curso de Programacion Distribuida
